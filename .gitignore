@@ -1,0 +1,26 @@
+# deps
+node_modules/
+
+# build
+dist/
+.vite/
+
+# test / coverage
+coverage/
+test-results/
+playwright-report/
+.playwright/
+
+# screenshots (検証ハーネス出力。lockfile は無視しない)
+tools/shots/
+
+# editor / os
+.DS_Store
+*.log
+npm-debug.log*
+.idea/
+.vscode/
+
+# env
+.env
+.env.*
