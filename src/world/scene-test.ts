@@ -91,8 +91,8 @@ export function createSceneTestEntities(): SceneTestEntities {
     radius: 0.45,
   });
 
-  player.facing = 'down';
-  gen.facing = 'down';
+  player.facing = 'right';
+  gen.facing = 'right';
   onibidoji.facing = 'left';
   gen.summon();
 
