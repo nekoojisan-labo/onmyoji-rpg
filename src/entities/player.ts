@@ -10,6 +10,8 @@ import {
   IFRAME_TOTAL_SEC,
   IFRAME_ACTIVE_FROM_SEC,
   IFRAME_ACTIVE_TO_SEC,
+  DODGE_COOLDOWN_SEC,
+  JU_KUSABI,
 } from '../config';
 import { facingFromVector } from './facing-util';
 
@@ -30,6 +32,12 @@ export class Player extends Entity {
   private iFrameFromMs = 0;
   /** 当フレームの入力（setInput で外部から供給）。 */
   private input: InputState | null = null;
+  /** 回避クールダウン明け時刻（ms）。 */
+  private dodgeReadyAtMs = 0;
+  /** 呪クールダウン明け時刻（ms）。 */
+  private juReadyAtMs = 0;
+  /** 回避モーション中の粗い被弾無効フラグ（時刻引数のない takeDamage 用。精密判定は isInvincible/takeDamageAt）。 */
+  private dodgeInvincible = false;
 
   constructor(init: { x: number; z: number; element: Element; baseStats: Stats; radius?: number }) {
     super(init);
@@ -58,11 +66,13 @@ export class Player extends Entity {
       return;
     }
 
-    // 回避（最優先・i-frame窓を設定）
+    // 回避モーション終了で粗い無敵フラグを解除（精密窓は isInvincible が管理）
+    if (this.dodgeInvincible && ctx.nowMs > this.iFrameFromMs + IFRAME_TOTAL_SEC * 1000) {
+      this.dodgeInvincible = false;
+    }
+    // 回避（最優先・i-frame窓とCDを設定。CD中は無視）
     if (inp.dodge) {
-      this.action = 'dodge';
-      this.iFrameFromMs = ctx.nowMs;
-      this.iFrameUntilMs = ctx.nowMs + Math.round(IFRAME_TOTAL_SEC * 1000);
+      this.startDodge(ctx.nowMs);
     }
 
     // 移動（斜めを正規化 → 速くならない）
@@ -91,5 +101,42 @@ export class Player extends Entity {
     const activeFrom = this.iFrameFromMs + IFRAME_ACTIVE_FROM_SEC * 1000;
     const activeTo = this.iFrameFromMs + IFRAME_ACTIVE_TO_SEC * 1000;
     return nowMs >= activeFrom && nowMs <= activeTo;
+  }
+
+  /** 回避できるか（クールダウン経過）。 */
+  canDodge(nowMs: number): boolean {
+    return nowMs >= this.dodgeReadyAtMs;
+  }
+
+  /** 回避を発動（無敵窓＋CDを設定）。CD中は何もしない。 */
+  startDodge(nowMs: number): void {
+    if (!this.canDodge(nowMs)) return;
+    this.iFrameFromMs = nowMs;
+    this.iFrameUntilMs = nowMs + Math.round(IFRAME_TOTAL_SEC * 1000);
+    this.dodgeReadyAtMs = nowMs + DODGE_COOLDOWN_SEC * 1000;
+    this.dodgeInvincible = true;
+    this.action = 'dodge';
+  }
+
+  /** 呪が撃てるか（CD経過）。 */
+  canCastJu(nowMs: number): boolean {
+    return nowMs >= this.juReadyAtMs;
+  }
+
+  /** 呪発動を記録しCDを張る。 */
+  markJuCast(nowMs: number): void {
+    this.juReadyAtMs = nowMs + JU_KUSABI.cooldownMs;
+  }
+
+  /** 時刻つき被弾。精密な i-frame 窓内ならスキップ（戦闘ループはこちらを使う）。 */
+  takeDamageAt(amount: number, nowMs: number): void {
+    if (this.isInvincible(nowMs)) return;
+    super.takeDamage(amount);
+  }
+
+  /** 時刻なし被弾。回避モーション中は粗く無効化（精密判定は takeDamageAt を使う）。 */
+  override takeDamage(amount: number): void {
+    if (this.dodgeInvincible) return;
+    super.takeDamage(amount);
   }
 }
