@@ -7,6 +7,11 @@ describe('CONFIG（契約 §2 Global Constraints の数値集約点）', () => {
     expect(CONFIG.camera.pitchDeg).toBe(30);
   });
 
+  it('カメラ追従はデッドゾーンと lerp 係数を持つ', () => {
+    expect(CONFIG.camera.deadZone).toBe(1.5);
+    expect(CONFIG.camera.followLerp).toBe(0.12);
+  });
+
   it('内部解像度は 1280x720', () => {
     expect(CONFIG.internalWidth).toBe(1280);
     expect(CONFIG.internalHeight).toBe(720);

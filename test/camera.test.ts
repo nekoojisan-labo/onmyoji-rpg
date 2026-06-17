@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import * as THREE from 'three';
 import { IsoCamera } from '../src/engine/camera';
 import {
+  CAMERA_DEADZONE_X,
+  CAMERA_FOLLOW_LERP,
   CAMERA_FAR,
   CAMERA_NEAR,
   CAMERA_VIEW_WORLD_WIDTH,
@@ -55,6 +57,18 @@ describe('IsoCamera yaw45/pitch30 fixed orthographic', () => {
     expect(cam.camera.position.length()).toBeGreaterThan(0);
   });
 
+  it('follow keeps the camera still inside the dead zone and lerps outside it', () => {
+    const cam = new IsoCamera(CAMERA_VIEW_WORLD_WIDTH, 16 / 9);
+
+    cam.follow(CAMERA_DEADZONE_X * 0.5, 0);
+    expect(recoverFocus(cam).x).toBeCloseTo(0, 9);
+
+    cam.follow(CAMERA_DEADZONE_X + 1, 0);
+    const focus = recoverFocus(cam);
+    expect(focus.x).toBeGreaterThan(0);
+    expect(focus.x).toBeLessThan(1);
+  });
+
   it('resize updates frustum height to keep aspect, width unchanged', () => {
     const cam = new IsoCamera(CAMERA_VIEW_WORLD_WIDTH, 16 / 9);
     cam.resize(4 / 3);
@@ -84,8 +98,9 @@ describe('IsoCamera applyPixelSnap', () => {
   it('snaps to the nearest pixel for a value above half a pixel', () => {
     const cam = new IsoCamera(CAMERA_VIEW_WORLD_WIDTH, INTERNAL_WIDTH / INTERNAL_HEIGHT);
     const worldPerPixel = CAMERA_VIEW_WORLD_WIDTH / INTERNAL_WIDTH;
+    const targetX = CAMERA_DEADZONE_X + (worldPerPixel * 1.6) / CAMERA_FOLLOW_LERP;
 
-    cam.follow(worldPerPixel * 1.6, 0);
+    cam.follow(targetX, 0);
     cam.applyPixelSnap(INTERNAL_WIDTH, INTERNAL_HEIGHT);
 
     const focus = recoverFocus(cam);

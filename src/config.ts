@@ -75,6 +75,9 @@ export const CAMERA_PITCH_DEG = CONFIG.camera.pitchDeg;
 export const CAMERA_NEAR = CONFIG.camera.clipNear;
 export const CAMERA_FAR = CONFIG.camera.clipFar;
 export const CAMERA_VIEW_WORLD_WIDTH = CONFIG.camera.viewWorldWidth;
+export const CAMERA_DEADZONE_X = CONFIG.camera.deadZone;
+export const CAMERA_DEADZONE_Z = 1.0;
+export const CAMERA_FOLLOW_LERP = CONFIG.camera.followLerp;
 
 export const FOG_COLOR = CONFIG.fog.color;
 export const FOG_NEAR = CONFIG.fog.near;
