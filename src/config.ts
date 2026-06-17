@@ -110,3 +110,26 @@ export const ONIBIDOJI_LEASH_RANGE = 12.0;      // 出現地点からの離脱�
 export const ONIBIDOJI_ATTACK_WINDUP_SEC = 0.4; // 攻撃予兆時間（alert→attack 発生まで）
 export const ONIBIDOJI_RECOVER_SEC = 0.6;       // 攻撃後の後隙
 export const ONIBIDOJI_HURT_SEC = 0.25;         // 被弾硬直
+
+// G7 戦闘アクション・パラメータ（00-README §5・00b §2.2 準拠）
+export const FUDA = {
+  skillMul: 1.0,   // 符は基本攻撃 skillMul=1.0
+  arcDeg: 60,      // 前方やや絞った扇
+  range: 6.0,      // 遠隔基本攻撃の射程（unit）
+} as const;
+
+// 呪（v1代表1スキル：陰の楔。前方扇・術力依存）
+export const JU_KUSABI = {
+  skillMul: 1.6,    // 呪の代表倍率（00b: 1.4..3.0 の範囲内）
+  kiCost: 12,       // 気消費
+  arcDeg: 45,       // 絞った扇
+  range: 7.0,
+  cooldownMs: 2500, // 個別CD
+} as const;
+
+// 玄の攻撃（疾風斬・木）
+export const GEN_ATTACK = {
+  skillMul: 1.2,
+  arcDeg: 70,
+  range: 2.6,      // 近接寄りの前方扇
+} as const;
