@@ -1,5 +1,4 @@
-// エントリ。G1 スモーク段階では Three.js シーンを #app に描く最小実装（G1.6 で確定）。
-// G2 以降で Game クラス（game.ts）へ差し替える。
+// エントリ。G2 スモークとして IsoCamera + Renderer + GameLoop でアイソメ床を表示する。
 import { mountSmokeScene } from './engine/smoke';
 
 const app = document.querySelector<HTMLDivElement>('#app');

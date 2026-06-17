@@ -66,3 +66,21 @@ export const CONFIG = {
     defaultHeight: 1.8,
   },
 } as const;
+
+export const INTERNAL_WIDTH = CONFIG.internalWidth;
+export const INTERNAL_HEIGHT = CONFIG.internalHeight;
+
+export const CAMERA_YAW_DEG = CONFIG.camera.yawDeg;
+export const CAMERA_PITCH_DEG = CONFIG.camera.pitchDeg;
+export const CAMERA_NEAR = CONFIG.camera.clipNear;
+export const CAMERA_FAR = CONFIG.camera.clipFar;
+export const CAMERA_VIEW_WORLD_WIDTH = CONFIG.camera.viewWorldWidth;
+
+export const FOG_COLOR = CONFIG.fog.color;
+export const FOG_NEAR = CONFIG.fog.near;
+export const FOG_FAR = CONFIG.fog.far;
+
+export const AMBIENT_COLOR = 0x8898b0 as const;
+export const AMBIENT_INTENSITY = 0.9 as const;
+
+export const BASE_MOVE_SPEED = CONFIG.move.baseMoveSpeed;
