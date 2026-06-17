@@ -87,3 +87,26 @@ export const AMBIENT_COLOR = 0x8898b0 as const;
 export const AMBIENT_INTENSITY = 0.9 as const;
 
 export const BASE_MOVE_SPEED = CONFIG.move.baseMoveSpeed;
+
+// 回避 i-frame（B1.2 / G6.3）
+export const IFRAME_TOTAL_SEC = CONFIG.iframe.totalSec;            // 回避モーション全体 0.45s
+export const IFRAME_ACTIVE_FROM_SEC = CONFIG.iframe.invincibleStartSec; // 無敵開始 0.05s
+export const IFRAME_ACTIVE_TO_SEC = CONFIG.iframe.invincibleEndSec;     // 無敵終了 0.28s
+export const DODGE_DISTANCE = CONFIG.iframe.dashDistance;          // 回避移動距離 2.5unit
+export const DODGE_COOLDOWN_SEC = CONFIG.iframe.cooldownSec;       // 回避クールダウン 0.6s
+
+// 式神「玄」追従AI（G6.4）
+export const GEN_FOLLOW_DISTANCE = 1.6;   // 主人公の後方に保つ距離(unit)。これ以内は静止（横滑り防止）
+export const GEN_REGROUP_DISTANCE = 4.0;  // これより離れたら regroup（急いで寄る）
+export const GEN_ATTACK_RANGE = 2.2;      // 敵がこの距離内なら attack 意図へ
+export const GEN_MOVE_SPEED = 5.0;        // 玄の移動速度(unit/s・主人公より速く再合流できる)
+
+// 鬼火童子（火）AI（G6.5）
+export const ONIBIDOJI_SIGHT_RANGE = 7.0;       // 視界（前方優位の発見距離）
+export const ONIBIDOJI_SENSE_RANGE = 3.0;       // 背後含む感知距離
+export const ONIBIDOJI_ATTACK_RANGE = 1.4;      // 攻撃を仕掛ける距離
+export const ONIBIDOJI_MOVE_SPEED = 3.2;        // 追跡移動速度(unit/s)
+export const ONIBIDOJI_LEASH_RANGE = 12.0;      // 出現地点からの離脱限界（超えたら帰還）
+export const ONIBIDOJI_ATTACK_WINDUP_SEC = 0.4; // 攻撃予兆時間（alert→attack 発生まで）
+export const ONIBIDOJI_RECOVER_SEC = 0.6;       // 攻撃後の後隙
+export const ONIBIDOJI_HURT_SEC = 0.25;         // 被弾硬直
