@@ -8,8 +8,14 @@ export default defineConfig({
     include: ['test/**/*.test.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/combat/**', 'src/combat-runtime/hitbox.ts', 'src/config.ts'],
+      include: ['src/combat/**/*.ts'],
       reporter: ['text', 'html'],
+      thresholds: {
+        statements: 80,
+        branches: 80,
+        functions: 80,
+        lines: 80,
+      },
     },
   },
 });
